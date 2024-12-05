@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './App.css';  // Make sure to import the CSS
 
-function Profile({ firstName, lastName, email, favoriteSeason }) {
+const Profile = ({ firstName, lastName, email, favoriteSeason }) => {
   return (
-    <div className="profile-container">
-      <h2>User Profile</h2>
-      <p>First Name: {firstName}</p>
-      <p>Last Name: {lastName}</p>
-      <p>Email: {email}</p>
-      <p>Favorite Season: {favoriteSeason}</p>
-      <Link to="/dashboard">Go to Dashboard</Link>
+    <div>
+      <h1>Profile Page</h1>
+      <p><strong>First Name:</strong> {firstName}</p>
+      <p><strong>Last Name:</strong> {lastName}</p>
+      <p><strong>Email:</strong> {email}</p>
+      <p><strong>Favorite Season:</strong> {favoriteSeason}</p>
+      {/* Link back to the home page */}
+      <Link to="/">Back to Home</Link>
     </div>
   );
-}
+};
 
 export default Profile;

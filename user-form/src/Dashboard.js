@@ -1,13 +1,20 @@
 import React from 'react';
-import './App.css';  // Make sure to import the CSS
+import { Link } from 'react-router-dom';
 
-function Dashboard() {
+const Dashboard = () => {
   return (
-    <div className="dashboard-container">
-      <h2>Dashboard</h2>
-      <p>This is the dashboard page with dummy data.</p>
+    <div>
+      <h1>Dashboard</h1>
+      <p>Here is some dummy data for the Dashboard page:</p>
+      <ul>
+        <li>Task 1: Complete React Lab</li>
+        <li>Task 2: Review React Router</li>
+        <li>Task 3: Refactor code</li>
+      </ul>
+       {/* Link back to the home page */}
+       <Link to="/">Back to Home</Link>
     </div>
   );
-}
+};
 
 export default Dashboard;

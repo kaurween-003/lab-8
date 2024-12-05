@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom';
 import Profile from './Profile';
 import Dashboard from './Dashboard';
 
@@ -20,6 +20,8 @@ function App() {
     password: '',
     favoriteSeason: '',
   });
+  const [success, setSuccess] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,8 +31,7 @@ function App() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     let formErrors = { ...errors };
     let isValid = true;
 
@@ -75,16 +76,17 @@ function App() {
     }
 
     setErrors(formErrors);
+    return isValid;
+  };
 
-    if (isValid) {
-      // Route to Profile page if valid
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        favoriteSeason: '',
-      });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+
+      setErrors({});
+      setSuccess(true);
+      setIsSubmitted(true);
     }
   };
 
@@ -92,81 +94,88 @@ function App() {
     <Router>
       <div className="App">
         <h1>React Form</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            placeholder="First Name"
-          />
-          <div>{errors.firstName}</div>
+        <Switch>
+          <Route exact path="/">
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+              />
+              <div>{errors.firstName}</div>
 
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            placeholder="Last Name"
-          />
-          <div>{errors.lastName}</div>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
+              />
+              <div>{errors.lastName}</div>
 
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-          />
-          <div>{errors.email}</div>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+              <div>{errors.email}</div>
 
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-          />
-          <div>{errors.password}</div>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+              />
+              <div>{errors.password}</div>
 
-          <select
-            name="favoriteSeason"
-            value={formData.favoriteSeason}
-            onChange={handleChange}
-          >
-            <option value="">Favorite Season</option>
-            <option value="Spring">Spring</option>
-            <option value="Fall">Fall</option>
-            <option value="Winter">Winter</option>
-          </select>
-          <div>{errors.favoriteSeason}</div>
+              <select
+                name="favoriteSeason"
+                value={formData.favoriteSeason}
+                onChange={handleChange}
+              >
+                <option value="">Favorite Season</option>
+                <option value="Spring">Spring</option>
+                <option value="Fall">Fall</option>
+                <option value="Winter">Winter</option>
+              </select>
+              <div>{errors.favoriteSeason}</div>
 
-          <button type="submit">Submit</button>
-        </form>
+              <button type="submit">Submit</button>
+            </form>
 
-        {Object.values(errors).every((error) => !error) && (
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <Profile
-                  firstName={formData.firstName}
-                  lastName={formData.lastName}
-                  email={formData.email}
-                  favoriteSeason={formData.favoriteSeason}
-                />
-              )}
+            {isSubmitted && (
+              <div>
+                 <h2>Form Submitted Successfully!</h2>
+                <Link to="/profile">Go to Profile</Link>
+                <br />
+                <Link to="/dashboard">Go to Dashboard</Link>
+              </div>
+            )}
+          </Route>
+
+          <Route path="/profile">
+            <Profile
+              firstName={formData.firstName}
+              lastName={formData.lastName}
+              email={formData.email}
+              favoriteSeason={formData.favoriteSeason}
             />
-            <Route exact path="/dashboard" component={Dashboard} />
-          </Switch>
-        )}
+          </Route>
+
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+
+          {isSubmitted && <Redirect to="/profile" />}
+        </Switch>
       </div>
     </Router>
   );
 }
 
 export default App;
-
-
-
