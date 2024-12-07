@@ -147,7 +147,8 @@ function App() {
 
               <button type="submit">Submit</button>
             </form>
-
+             {/* Success Message */}
+             {success && <h2>Form Submitted Successfully!</h2>}
             {isSubmitted && (
               <div>
                  <h2>Form Submitted Successfully!</h2>
